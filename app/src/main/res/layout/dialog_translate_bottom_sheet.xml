@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:paddingTop="16dp">
+    <TextView
+        android:id="@+id/tv_word"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        android:fontFamily="@font/roboto_medium"
+        android:text="word"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_20sdp"
+        android:layout_marginStart="@dimen/_8sdp"
+        android:layout_marginEnd="@dimen/_8sdp"
+        />
+    <TextView
+        android:id="@+id/tv_transcription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/tv_word"
+        android:textAlignment="textEnd"
+        android:fontFamily="@font/roboto_medium"
+        android:text="word"
+        android:layout_marginTop="@dimen/_4sdp"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_20sdp"
+        android:layout_marginStart="@dimen/_8sdp"
+        android:layout_marginEnd="@dimen/_8sdp"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/tv_transcription"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:background="@color/yellow"
+        android:padding="@dimen/_8sdp"
+        android:id="@+id/line_btns"
+        >
+        <ImageButton
+            android:id="@+id/img_btn_copy"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginEnd="@dimen/_16sdp"
+            android:background="?android:selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_copy" />
+
+        <ImageButton
+            android:id="@+id/img_btn_share"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginEnd="@dimen/_16sdp"
+            android:background="?android:selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_share" />
+
+        <ImageButton
+            android:id="@+id/img_btn_favorite"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginEnd="@dimen/_16sdp"
+            android:background="?android:selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_star" />
+
+        <ImageButton
+            android:id="@+id/img_btn_voice"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginEnd="@dimen/_8sdp"
+            android:background="?android:selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_volume_high" />
+    </LinearLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_container_chapter_with_lessons"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_110sdp"
+        android:background="@android:color/transparent"
+        android:clipToOutline="false"
+        android:clipToPadding="false"
+        android:outlineSpotShadowColor="@color/yellow_100"
+        android:outlineAmbientShadowColor="@color/yellow_100"
+        android:overScrollMode="ifContentScrolls"
+        android:paddingLeft="@dimen/_8sdp"
+        android:paddingTop="@dimen/_8sdp"
+        android:paddingRight="@dimen/_8sdp"
+        app:layout_constraintTop_toBottomOf="@id/line_btns"
+        tools:listitem="@layout/item_translate" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

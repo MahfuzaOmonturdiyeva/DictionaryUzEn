@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/User/DictionaryUzEn/app/src/main/res/drawable/background_search.xml" value="0.1785" />
+        <entry key="..\:/Users/User/DictionaryUzEn/app/src/main/res/drawable/ic_star_bold.xml" value="0.1785" />
+        <entry key="..\:/Users/User/DictionaryUzEn/app/src/main/res/drawable/ic_translate.xml" value="0.1785" />
+        <entry key="..\:/Users/User/DictionaryUzEn/app/src/main/res/drawable/ic_volume_high.xml" value="0.1785" />
+        <entry key="..\:/Users/User/DictionaryUzEn/app/src/main/res/layout/activity_main.xml" value="0.23802083333333332" />
+        <entry key="..\:/Users/User/DictionaryUzEn/app/src/main/res/layout/appbar.xml" value="0.5048701298701299" />
+        <entry key="..\:/Users/User/DictionaryUzEn/app/src/main/res/layout/dialog_translate_bottom_sheet.xml" value="0.264" />
+        <entry key="..\:/Users/User/DictionaryUzEn/app/src/main/res/layout/item_translate.xml" value="0.23802083333333332" />
+        <entry key="..\:/Users/User/DictionaryUzEn/app/src/main/res/layout/item_word.xml" value="0.23802083333333332" />
+        <entry key="..\:/Users/User/DictionaryUzEn/app/src/main/res/layout/screen_favorite.xml" value="0.23802083333333332" />
+        <entry key="..\:/Users/User/DictionaryUzEn/app/src/main/res/layout/screen_search.xml" value="0.4" />
+        <entry key="..\:/Users/User/DictionaryUzEn/app/src/main/res/layout/serachview.xml" value="0.5706422018348624" />
+        <entry key="..\:/Users/User/DictionaryUzEn/app/src/main/res/menu/menu_home_bottom_navigation.xml" value="0.23802083333333332" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>
