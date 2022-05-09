@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.screen.FavoriteScreen"
-    >
+    tools:context=".ui.screen.FavoriteScreen">
 
     <include
         android:id="@+id/appbar"
@@ -19,14 +18,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
-        android:clipToOutline="false"
         android:clipToPadding="false"
-        android:outlineSpotShadowColor="@color/yellow_100"
-        android:outlineAmbientShadowColor="@color/yellow_100"
-        android:overScrollMode="ifContentScrolls"
+        android:overScrollMode="always"
         android:paddingLeft="@dimen/_8sdp"
         android:paddingTop="@dimen/_8sdp"
         android:paddingRight="@dimen/_8sdp"
+        android:paddingBottom="@dimen/_24sdp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         app:layout_constraintTop_toBottomOf="@id/appbar"
         tools:listitem="@layout/item_word" />
 </androidx.constraintlayout.widget.ConstraintLayout>

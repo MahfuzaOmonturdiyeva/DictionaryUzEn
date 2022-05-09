@@ -35,7 +35,8 @@ class TranslationAdapter : ListAdapter<WordDataWithCategory, TranslationAdapter.
         RecyclerView.ViewHolder(itemTranslateBinding.root) {
         fun bind() {
             val item = getItem(absoluteAdapterPosition)
-            if (item.langId != 1) {
+            if (item.langId == 1) {
+                itemTranslateBinding.imgBtnVoice.visibility = View.VISIBLE
                 itemTranslateBinding.imgBtnVoice.setOnClickListener {
                     onclickVoiceListener?.let { it1 -> it1(item.name!!) }
                 }

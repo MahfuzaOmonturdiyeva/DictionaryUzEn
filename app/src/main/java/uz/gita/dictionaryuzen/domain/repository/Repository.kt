@@ -35,5 +35,5 @@ interface Repository {
     /**
      * get all translations of the word from room
      */
-    fun getTranslationWords(id:Int): LiveData<List<WordDataWithCategory>>
+    fun getTranslationWords(id:Int): List<WordDataWithCategory>
 }

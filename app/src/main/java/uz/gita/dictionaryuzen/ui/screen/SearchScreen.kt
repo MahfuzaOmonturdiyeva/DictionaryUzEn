@@ -17,8 +17,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import by.kirich1409.viewbindingdelegate.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
+import me.zhanghai.android.fastscroll.FastScroller
+import me.zhanghai.android.fastscroll.FastScrollerBuilder
 import uz.gita.dictionaryuzen.R
 import uz.gita.dictionaryuzen.data.model.common.WordDataWithCategory
 import uz.gita.dictionaryuzen.databinding.ScreenFavoriteBinding
@@ -34,7 +37,8 @@ class SearchScreen : Fragment(R.layout.screen_search) {
     private val binding by viewBinding(ScreenFavoriteBinding::bind)
     private val viewModel: SearchViewModel by viewModels<SearchViewModelImpl>()
     private val adapter by lazy { WordAdapter() }
-    private lateinit var tts: TextToSpeech
+
+    private var tts: TextToSpeech? = null
     private var text: String? = null
 
     override fun onStart() {
@@ -58,15 +62,16 @@ class SearchScreen : Fragment(R.layout.screen_search) {
         binding.rvContainerChapterWithLessons.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.rvContainerChapterWithLessons.adapter = adapter
+        val fastScroller: FastScroller = createFastScroller(binding.rvContainerChapterWithLessons)
+        binding.rvContainerChapterWithLessons.setOnApplyWindowInsetsListener(
+            ScrollingViewOnApplyWindowInsetsListener(binding.rvContainerChapterWithLessons, fastScroller)
+        )
         viewModel.joinWords()
 
 
         binding.appbar.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-//                if(query!=null && query!=""){
-//                    Log.d("1111", "onQueryTextChange:$query")
-//                } else viewModel.joinFavoriteWords()
-                return true
+                return false
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
@@ -75,7 +80,6 @@ class SearchScreen : Fragment(R.layout.screen_search) {
                 } else {
                     viewModel.search(newText.trim())
                 }
-                text = newText
                 return true
             }
         })
@@ -85,7 +89,7 @@ class SearchScreen : Fragment(R.layout.screen_search) {
     }
 
     private val joinFavoriteWordObserver = Observer<Cursor> {
-        adapter.submitCursor(cursor = it, text)
+        adapter.submitCursor(cursor = it, binding.appbar.searchView.query.toString())
     }
     private val onCopyWordObserver = Observer<String> {
         val clipboard: ClipboardManager? =
@@ -93,13 +97,7 @@ class SearchScreen : Fragment(R.layout.screen_search) {
         val clip = ClipData.newPlainText("Word-So'z ", it)
         clip?.let {
             clipboard?.setPrimaryClip(clip)
-            val clipboard: ClipboardManager? =
-                requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?
-            val clip = it
-            clip.let {
-                clipboard?.setPrimaryClip(clip)
-                Toast.makeText(requireContext(), "copy", Toast.LENGTH_SHORT).show()
-            }
+            Toast.makeText(requireContext(), "copy", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -116,15 +114,17 @@ class SearchScreen : Fragment(R.layout.screen_search) {
     private val outputVoiceWordObserver = Observer<String> { word ->
         tts = TextToSpeech(requireContext(), TextToSpeech.OnInitListener {
             if (it == TextToSpeech.SUCCESS) {
-                tts.language = Locale.US
-                tts.setSpeechRate(1.0f)
-                tts.speak(word, TextToSpeech.QUEUE_ADD, null)
+                tts?.let {
+                    it.language = Locale.US
+                    it.setSpeechRate(1.0f)
+                    it.speak(word, TextToSpeech.QUEUE_ADD, null)
+                }
             }
         })
     }
     private val openDialogObserver = Observer<List<WordDataWithCategory>> {
         val dialog = TranslationBottomSheetDialog(requireContext())
-        dialog.setContact(it)
+        dialog.setWord(it)
         dialog.setOnClickCopyListener {
             viewModel.onCopy(it)
         }
@@ -150,7 +150,6 @@ class SearchScreen : Fragment(R.layout.screen_search) {
             i.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.US)
             i.putExtra(RecognizerIntent.EXTRA_PROMPT, "Say / Gapiring")
             startActivityForResult(i, 102)
-
         }
     }
 
@@ -165,5 +164,8 @@ class SearchScreen : Fragment(R.layout.screen_search) {
                 binding.appbar.searchView.setQuery(text, true)
             }
         }
+    }
+    private fun createFastScroller(recyclerView: RecyclerView): FastScroller {
+        return FastScrollerBuilder(recyclerView).useMd2Style().build()
     }
 }

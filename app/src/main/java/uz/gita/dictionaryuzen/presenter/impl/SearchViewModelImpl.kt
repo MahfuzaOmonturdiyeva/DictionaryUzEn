@@ -15,7 +15,7 @@ import javax.inject.Inject
 class SearchViewModelImpl @Inject constructor(
     private val repository: Repository
 ) : SearchViewModel, ViewModel() {
-    override var openDialogLiveData: LiveData<List<WordDataWithCategory>> = MutableLiveData()
+    override var openDialogLiveData: MutableLiveData<List<WordDataWithCategory>> = MutableLiveData()
     override val joinWordLiveData: MutableLiveData<Cursor> = MutableLiveData()
     override val onShareWordLiveData: MutableLiveData<String> = MutableLiveData()
     override val onCopyWordLiveData: MutableLiveData<String> = MutableLiveData()
@@ -32,10 +32,11 @@ class SearchViewModelImpl @Inject constructor(
 
     override fun updateWord(isFav: Int, id: Int) {
         repository.updateWord(isFav, id)
+        joinWords()
     }
 
     override fun getTranslationWords(id: Int) {
-        openDialogLiveData = repository.getTranslationWords(id)
+        openDialogLiveData.value = repository.getTranslationWords(id)
     }
 
     override fun onShare(string: String) {

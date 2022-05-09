@@ -1,7 +1,9 @@
 package uz.gita.dictionaryuzen.ui.dialog
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import uz.gita.dictionaryuzen.R
@@ -28,11 +30,11 @@ class TranslationBottomSheetDialog(
     }
 
     fun setOnClickCopyListener(l: (String) -> Unit) {
-        onclickShareListener = l
+        onclickCopyListener = l
     }
 
     fun setOnClickVoiceListener(l: (String) -> Unit) {
-        onclickShareListener = l
+        onclickVoiceListener = l
     }
 
     private val binding = DialogTranslateBottomSheetBinding.inflate(LayoutInflater.from(context))
@@ -43,47 +45,65 @@ class TranslationBottomSheetDialog(
         dialog.show()
     }
 
-    fun setContact(list: List<WordDataWithCategory>) {
+    fun setWord(list: List<WordDataWithCategory>) {
         val list1 = list as ArrayList
         val word = list1[0]
         list1.removeAt(0)
         var string = "${word.name} - "
         for (item in list1)
-            string += item.name
+            string += item.name+", "
 
         binding.apply {
             this.tvWord.text = word.name
             this.tvTranscription.text = word.transcription.toString()
-            this.imgBtnFavorite.setBackgroundResource(
-                if (word.isFav == 0) {
-                    R.drawable.ic_star
-                } else R.drawable.ic_star_bold
-            )
+            setFavorite(word.isFav)
+
             this.rvContainerChapterWithLessons.layoutManager =
                 LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             this.rvContainerChapterWithLessons.adapter = adapter
             adapter.submitList(list)
+            adapter.setOnClickVoiceListener {
+                onclickVoiceListener?.let { it1 -> it1(it) }
+            }
             this.imgBtnFavorite.setOnClickListener {
                 val data = UpdateData(
                     if (word.isFav == 0) {
+                        word.isFav = 1
                         1
-                    } else 0, word._id!!
+                    } else {
+                        word.isFav = 0
+                        0
+                    }, word._id!!
                 )
                 onclickFavoriteListener?.let { it1 ->
                     it1(
                         data
                     )
                 }
+                setFavorite(word.isFav)
             }
             this.imgBtnShare.setOnClickListener {
                 onclickShareListener?.let { it1 -> it1(string) }
             }
             this.imgBtnCopy.setOnClickListener {
-                onclickCopyListener?.let { it1 -> it1(string) }
+                onclickCopyListener?.let { it1 -> it1(string)}
             }
-            this.imgBtnVoice.setOnClickListener {
-                onclickVoiceListener?.let { it1 -> it1(word.name!!) }
+            if (word.langId == 1) {
+                this.imgBtnVoice.visibility = View.VISIBLE
+                this.imgBtnVoice.setOnClickListener {
+                    onclickVoiceListener?.let { it1 -> it1(word.name!!) }
+                }
+            } else {
+                this.imgBtnVoice.visibility = View.GONE
             }
         }
+    }
+
+    private fun setFavorite(isFav: Int) {
+        binding.imgBtnFavorite.setBackgroundResource(
+            if (isFav == 0) {
+                R.drawable.ic_star
+            } else R.drawable.ic_star_bold
+        )
     }
 }

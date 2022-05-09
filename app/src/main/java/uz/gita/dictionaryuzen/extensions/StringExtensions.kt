@@ -11,8 +11,8 @@ fun String.toColoredSpannable(query: String): Spannable {
     if (query.isEmpty())
         return span
 
-    
-    val start = this.indexOf(query, ignoreCase = true)
+
+    var start = this.indexOf(query, ignoreCase = true)
     val end = start + query.length
 
     span.setSpan(
@@ -21,6 +21,5 @@ fun String.toColoredSpannable(query: String): Spannable {
         end,
         Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
     )
-
     return span
 }

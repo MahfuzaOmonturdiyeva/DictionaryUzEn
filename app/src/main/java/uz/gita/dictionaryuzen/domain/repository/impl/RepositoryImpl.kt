@@ -1,6 +1,7 @@
 package uz.gita.dictionaryuzen.domain.repository.impl
 
 import android.database.Cursor
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import uz.gita.dictionaryuzen.data.model.common.WordData
@@ -25,20 +26,37 @@ class RepositoryImpl @Inject constructor(
 
     override fun updateWord(isFav: Int, id: Int) = wordDao.updateWord(isFav, id)
 
-    override fun getTranslationWords(id: Int): LiveData<List<WordDataWithCategory>> {
+    override fun getTranslationWords(id: Int): List<WordDataWithCategory> {
         val listTranslationWordsId = translationDao.getTranslationId(id)
         val listTranslationWords = ArrayList<WordDataWithCategory>()
-        val word=wordDao.getTranslationWords(id)
-        listTranslationWords.add(WordDataWithCategory(word._id, word.name, word.langId, word.transcription, word.isFav, word.Note, 0))
+        val word = wordDao.getTranslationWords(id)
+        listTranslationWords.add(
+            WordDataWithCategory(
+                word._id,
+                word.name,
+                word.langId,
+                word.transcription,
+                word.isFav,
+                word.Note,
+                0
+            )
+        )
         for (item in listTranslationWordsId) {
-            item.idTranslation?.let {
-                val word=wordDao.getTranslationWords(item.idTranslation)
-                val wordWithCategory=WordDataWithCategory(word._id, word.name, word.langId, word.transcription, word.isFav, word.Note, item.idCategory)
-                listTranslationWords.add(wordWithCategory)
-            }
+
+            val word = wordDao.getTranslationWords(item.idTranslation)
+            val wordWithCategory = WordDataWithCategory(
+                word._id,
+                word.name,
+                word.langId,
+                word.transcription,
+                word.isFav,
+                word.Note,
+                if (item.idCategory == null) 0 else item.idCategory!!
+            )
+            listTranslationWords.add(wordWithCategory)
         }
         val mutableLiveData = MutableLiveData<List<WordDataWithCategory>>()
         mutableLiveData.value = listTranslationWords
-        return mutableLiveData
+        return listTranslationWords
     }
 }

@@ -19,6 +19,7 @@ class WordAdapter : RecyclerView.Adapter<WordAdapter.Holder>() {
     fun setOnClickFavoriteListener(l: (UpdateData) -> Unit) {
         onclickFavoriteListener = l
     }
+
     fun setOnClickWordListener(l: (Int) -> Unit) {
         onclickWordListener = l
     }
@@ -34,11 +35,14 @@ class WordAdapter : RecyclerView.Adapter<WordAdapter.Holder>() {
         fun bind() {
             cursor?.let {
                 it.moveToPosition(adapterPosition)
-                val id=it.getInt(it.getColumnIndexOrThrow("_id"))
+                val id = it.getInt(it.getColumnIndexOrThrow("_id"))
+
                 val isFav = it.getInt(it.getColumnIndexOrThrow("isFav"))
 
                 itemWordBinding.line.setOnClickListener {
-                    onclickWordListener?.let { it1 -> it1(id) }
+                    onclickWordListener?.let { it1 ->
+                        it1(id)
+                    }
                 }
 
                 itemWordBinding.tvWord.text = it.getString(it.getColumnIndexOrThrow("name"))
@@ -52,8 +56,16 @@ class WordAdapter : RecyclerView.Adapter<WordAdapter.Holder>() {
                     }
                 )
                 itemWordBinding.imgBtnFavorite.setOnClickListener {
-                    val data=UpdateData(if(isFav==0) {0} else {1}, id)
-                    onclickFavoriteListener?.let { it1 -> it1(data) }
+                    val data = UpdateData(
+                        if (isFav == 0) {
+                            1
+                        } else {
+                            0
+                        }, id
+                    )
+                    onclickFavoriteListener?.let { it1 ->
+                        it1(data)
+                    }
                 }
             }
         }
@@ -67,7 +79,6 @@ class WordAdapter : RecyclerView.Adapter<WordAdapter.Holder>() {
 
     override fun getItemCount(): Int {
         cursor?.let {
-            Log.d("1111", "getItemCount:${it.count} ")
             return it.count
         }
         return 0

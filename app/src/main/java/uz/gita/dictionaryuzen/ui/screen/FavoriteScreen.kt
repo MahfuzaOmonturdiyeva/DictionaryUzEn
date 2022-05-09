@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import android.speech.tts.TextToSpeech
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
@@ -62,10 +63,7 @@ class FavoriteScreen : Fragment(R.layout.screen_favorite) {
 
         binding.appbar.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-//                if(query!=null && query!=""){
-//                    Log.d("1111", "onQueryTextChange:$query")
-//                } else viewModel.joinFavoriteWords()
-                return true
+                return false
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
@@ -74,7 +72,6 @@ class FavoriteScreen : Fragment(R.layout.screen_favorite) {
                 } else {
                     viewModel.searchFavoriteWord(newText.trim())
                 }
-                text = newText
                 return true
             }
         })
@@ -84,7 +81,7 @@ class FavoriteScreen : Fragment(R.layout.screen_favorite) {
     }
 
     private val joinFavoriteWordObserver = Observer<Cursor> {
-        adapter.submitCursor(cursor = it, text)
+        adapter.submitCursor(cursor = it, binding.appbar.searchView.query.toString())
     }
     private val onCopyWordObserver = Observer<String> {
         val clipboard: ClipboardManager? =
@@ -92,13 +89,7 @@ class FavoriteScreen : Fragment(R.layout.screen_favorite) {
         val clip = ClipData.newPlainText("Word-So'z ", it)
         clip?.let {
             clipboard?.setPrimaryClip(clip)
-            val clipboard: ClipboardManager? =
-                requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?
-            val clip = it
-            clip.let {
-                clipboard?.setPrimaryClip(clip)
-                Toast.makeText(requireContext(), "copy", Toast.LENGTH_SHORT).show()
-            }
+            Toast.makeText(requireContext(), "copy", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -123,7 +114,7 @@ class FavoriteScreen : Fragment(R.layout.screen_favorite) {
     }
     private val openDialogObserver = Observer<List<WordDataWithCategory>> {
         val dialog = TranslationBottomSheetDialog(requireContext())
-        dialog.setContact(it)
+        dialog.setWord(it)
         dialog.setOnClickCopyListener {
             viewModel.onCopy(it)
         }
@@ -149,7 +140,6 @@ class FavoriteScreen : Fragment(R.layout.screen_favorite) {
             i.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.US)
             i.putExtra(RecognizerIntent.EXTRA_PROMPT, "Say / Gapiring")
             startActivityForResult(i, 102)
-
         }
     }
 

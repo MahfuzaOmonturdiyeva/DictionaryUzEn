@@ -6,8 +6,8 @@ import androidx.room.PrimaryKey
 @Entity (tableName = "translation")
 data class TranslationEntity(
     @PrimaryKey
-    val _id: Int?,
-    val idWord: Int?,
-    val idTranslation: Int?,
-    val idCategory: Int?
+    val _id: Int,
+    val idWord: Int,
+    val idTranslation: Int,
+    val idCategory: Int
 )
